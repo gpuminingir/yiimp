@@ -9,13 +9,13 @@
 
 #include <stdexcept>
 
-#include <sha3/sph_sha2.h>
+#include "../sha3/sph_sha2.h"
 
 #include "equihash.h" // equi_verify()
 
 
 // All solutions (BLOCK_HEADER_LEN + SOLSIZE_LEN + SOL_LEN) sha256d should be under the target
-extern "C" void equi_hash(const char* input, char* output, uint32_t len)
+void equi_hash(const char* input, char* output, uint32_t len)
 {
 	uint8_t _ALIGN(64), hash0[32], hash1[32];
 
