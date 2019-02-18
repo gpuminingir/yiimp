@@ -9,7 +9,7 @@
 
 #include <stdexcept>
 
-#include "../sha3/sph_sha2.h"
+#include <sha3/sph_sha2.h>
 
 #include "equihash.h" // equi_verify()
 
