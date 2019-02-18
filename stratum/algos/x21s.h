@@ -1,5 +1,5 @@
-#ifndef X13_H
-#define X13_H
+#ifndef X21S_H
+#define X21S_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -7,10 +7,11 @@ extern "C" {
 
 #include <stdint.h>
 
-void x13bcd_hash(const char* input, char* output, uint32_t len);
+void x21s_hash(const char* input, char* output, uint32_t len);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif
+

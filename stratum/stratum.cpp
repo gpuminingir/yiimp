@@ -118,11 +118,12 @@ YAAMP_ALGO g_algos[] =
 	{"c11", c11_hash, 1, 0, 0},
 	{"x11", x11_hash, 1, 0, 0},
 	{"x12", x12_hash, 1, 0, 0},
-	{"x13", x13_hash, 1, 0, 0},
+	{"bcd", x13bcd_hash, 1, 0, 0},
 	{"x14", x14_hash, 1, 0, 0},
 	{"x15", x15_hash, 1, 0, 0},
 	{"x17", x17_hash, 1, 0, 0},
 	{"x22i", x22i_hash, 1, 0, 0},
+	{"x21s", x21s_hash, 0x100, 0, 0},
 
 	{"x11evo", x11evo_hash, 1, 0, 0},
 	{"xevan", xevan_hash, 0x100, 0, 0},
@@ -130,6 +131,7 @@ YAAMP_ALGO g_algos[] =
 	{"x16r", x16r_hash, 0x100, 0, 0},
 	{"x16s", x16s_hash, 0x100, 0, 0},
 	{"timetravel", timetravel_hash, 0x100, 0, 0},
+
 	{"bitcore", timetravel10_hash, 0x100, 0, 0},
 	{"exosis", exosis_hash, 0x100, 0, 0},
 	{"hsr", hsr_hash, 1, 0, 0},
@@ -195,13 +197,13 @@ YAAMP_ALGO g_algos[] =
 
 	{"sha256t", sha256t_hash, 1, 0, 0}, // sha256 3x
 
-	{"sha256q", sha256q_hash, 1, 0, 0}, // sha256 4x
-
 	{"sib", sib_hash, 1, 0, 0},
 
 	{"whirlcoin", whirlpool_hash, 1, 0, sha256_hash_hex }, /* old sha merkleroot */
 	{"whirlpool", whirlpool_hash, 1, 0 }, /* sha256d merkleroot */
 	{"whirlpoolx", whirlpoolx_hash, 1, 0, 0},
+
+        {"equihash", equi_hash, 1, 0, 0},
 
 	{"", NULL, 0, 0},
 };
