@@ -15,7 +15,7 @@
 
 
 // All solutions (BLOCK_HEADER_LEN + SOLSIZE_LEN + SOL_LEN) sha256d should be under the target
-extern "C" void equi_hash(const void* input, void* output, int len)
+extern "C" void equi_hash(const char* input, char* output, uint32_t len)
 {
 	uint8_t _ALIGN(64), hash0[32], hash1[32];
 

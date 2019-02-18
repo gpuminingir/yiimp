@@ -14,7 +14,7 @@ extern "C" {
 #define WN 200
 //#define CONFIG_MODE_1 9, 1248, 12, 640, packer_cantor /* eqcuda.hpp */
 
-void equi_hash(const void* input, void* output, int len);
+void equi_hash(const char* input, char* output, uint32_t len);
 //int  equi_verify_sol(void* const hdr, void* const soln);
 //bool equi_verify(uint8_t* const hdr, uint8_t* const soln);
 
