@@ -4,12 +4,12 @@
  * tpruvot - 2017 (GPL v3)
  */
 #include <stdio.h>
-#include <unistd.h>
-#include <assert.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include <stdexcept>
 
-#include <sph3/sph_sha2.h>
+#include <sha3/sph_sha2.h>
 
 #include "equihash.h" // equi_verify()
 
