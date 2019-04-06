@@ -91,6 +91,7 @@ function showPageHeader()
 
 	showItemHeader(controller()->id=='site' && $action=='index' && !$ad, '/', 'Home');
 	showItemHeader($action=='mining', '/site/mining', 'Pool');
+	showItemHeader($action=='coins', '/site/coins', 'Coins');
 	showItemHeader(controller()->id=='site'&&($action=='index' || $action=='wallet') && $ad, "/?address=$wallet", 'Wallet');
 	showItemHeader(controller()->id=='stats', '/stats', 'Graphs');
 	showItemHeader($action=='miners', '/site/miners', 'Miners');
