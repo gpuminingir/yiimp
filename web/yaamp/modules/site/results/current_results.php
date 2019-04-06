@@ -121,8 +121,8 @@ foreach($algos as $item)
 		echo "<tr style='cursor: pointer' class='ssrow' onclick='javascript:select_algo(\"$algo\")'>";
 
 	echo "<td><b>$algo</b></td>";
-	echo "<td align=right style='font-size: .8em;'>$port</td>";
-	echo "<td align=right style='font-size: .8em;'>".($coins==1 ? $coinsym : $coins)."</td>";
+	echo "<td align=right style='font-size: .8em;'>-</td>";
+	echo "<td align=right style='font-size: .8em;'> $coins</td>";
 	echo "<td align=right style='font-size: .8em;'>$workers</td>";
 	echo '<td align="right" style="font-size: .8em;" data="'.$hashrate.'">'.$hashrate_sfx.'</td>';
 	echo "<td align=right style='font-size: .8em;'>{$fees}%</td>";
@@ -144,6 +144,41 @@ foreach($algos as $item)
 		echo '<td align="right" style="font-size: .8em;" data="'.$btcmhday1.'">'.$btcmhday1.'</td>';
 
 	echo "</tr>";
+
+if ($coins > 0){
+    $list = getdbolist('db_coins', "enable and visible and auto_ready and algo=:algo order by index_avg desc", array(':algo'=>$algo));
+    foreach($list as $coin){
+        $name = substr($coin->name, 0, 12);
+        $symbol = $coin->getOfficialSymbol();
+        echo "<tr>";
+        echo "<td align='left' valign='top' style='font-size: .8em; padding-left:20px;vertical-align:middle;'><img width='16' src='".$coin->image."'><b>$name</b> <span style='font-size: .8em'>($symbol)</span></td>";
+        $port_count = getdbocount('db_stratums', "algo=:algo and symbol=:symbol", array(':algo'=>$algo,':symbol'=>$symbol));
+        $port_db = getdbosql('db_stratums', "algo=:algo and symbol=:symbol", array(':algo'=>$algo,':symbol'=>$symbol));
+        if($port_count == 1)
+            echo "<td align='right' style='font-size: .8em;'>".$port_db->port."</td>";
+        else
+            echo "<td align='right' style='font-size: .8em;'>$port</td>";
+           
+        echo "<td align='right' style='font-size: .8em;'>$symbol</td>";
+       
+        if($port_count == 1)
+            echo "<td align='right' style='font-size: .8em;'>".$port_db->workers."</td>";
+        else
+            echo "<td align='right' style='font-size: .8em;'>$workers</td>";
+       
+        $pool_hash = yaamp_coin_rate($coin->id);
+        $pool_hash_sfx = $pool_hash? Itoa2($pool_hash).'h/s': '';
+        echo "<td align='right' style='font-size: .8em;'>$pool_hash_sfx</td>";
+       
+        echo "<td align='right' style='font-size: .8em;'>{$fees}%</td>";
+       
+        $btcmhd = yaamp_profitability($coin);
+        $btcmhd = mbitcoinvaluetoa($btcmhd);
+        echo "<td align='right' style='font-size: .8em;'>$btcmhd</td>";
+        echo "</tr>";
+    }
+}
+
 
 	$total_coins += $coins;
 	$total_miners += $workers;

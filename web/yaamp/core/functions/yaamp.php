@@ -77,6 +77,7 @@ function yaamp_get_algos()
 		'yescryptR32',
 		'whirlpool',
 		'zr5',
+		'equihash_144',
 	);
 }
 
@@ -217,6 +218,7 @@ function getAlgoColors($algo)
 		'yescryptR16'	=> '#e2d0e2',
 		'yescryptR32'	=> '#e2d0d2',
 		'zr5'		=> '#d0b0d0',
+		'equihash_144' 	=> '#e8e8e8',
 
 		'MN'		=> '#ffffff', // MasterNode Earnings
 		'PoS'		=> '#ffffff'  // Stake
@@ -306,6 +308,7 @@ function getAlgoPort($algo)
 		'skunk'		=> 8433,
 		'tribus'	=> 8533,
 	        'a5a'   	=> 8633,
+		'equihash_144'	=> 5055,
 	);
 
 	global $configCustomPorts;

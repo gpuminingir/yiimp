@@ -68,6 +68,8 @@ class ApiController extends CommonController
 			$btcmhday1 = $hashrate1 > 0 ? mbitcoinvaluetoa($total1 / $hashrate1 * 1000000 * 1000 * $algo_unit_factor) : 0;
 
 			$fees = yaamp_fee($algo);
+
+
 			$port = getAlgoPort($algo);
 
 			$stat  = array(
@@ -145,6 +147,11 @@ class ApiController extends CommonController
 					array(':id'=>$coin->id, ':algo'=>$coin->algo)
 				);
 
+
+                                $totalblocks = dborow("SELECT count(*) as a FROM blocks ".
+                                        "WHERE coin_id=:id AND category IN ('immature','generate')",
+                                        array(':id'=>$coin->id));
+
 				// Coin hashrate, we only store the hashrate per algo in the db,
 				// we need to compute the % of the coin compared to others with the same algo
 				if ($workers > 0) {
@@ -159,13 +166,33 @@ class ApiController extends CommonController
 					$factor = $algo_hashrate = 0;
 				}
 
+				$network_hash = controller()->memcache->get("yiimp-nethashrate-{$coin->symbol}");
+	if (!$network_hash) {
+		$remote = new WalletRPC($coin);
+		if ($remote)
+			$info = $remote->getmininginfo();
+		if (isset($info['networkhashps'])) {
+			$network_hash = $info['networkhashps'];
+			controller()->memcache->set("yiimp-nethashrate-{$coin->symbol}", $info['networkhashps'], 60);
+		}
+		else if (isset($info['netmhashps'])) {
+			$network_hash = floatval($info['netmhashps']) * 1e6;
+			controller()->memcache->set("yiimp-nethashrate-{$coin->symbol}", $coin->network_hash, 60);
+		}
+	}
+
 				$btcmhd = yaamp_profitability($coin);
 				$btcmhd = mbitcoinvaluetoa($btcmhd);
 
+				$algo = $coin->algo;
+			        $port_db = getdbosql('db_stratums', "algo=:algo and symbol=:symbol", array(':algo'=>$algo,':symbol'=>$symbol));
+//$port_db = implode(",",$port_db);
+//                                        'port' => getAlgoPort($coin->algo),
 				$data[$symbol] = array(
-					'algo' => $coin->algo,
-					'port' => getAlgoPort($coin->algo),
+					'algo' => $algo,
+					'port' => (int) $port_db["port"],
 					'name' => $coin->name,
+					'symbol'=> $symbol,
 					'height' => (int) $coin->block_height,
 					'workers' => $workers,
 					'shares' =>  (int) arraySafeVal($shares,'shares'),
@@ -174,6 +201,8 @@ class ApiController extends CommonController
 					//'percent' => round($factor * 100, 1),
 					'24h_blocks' => (int) arraySafeVal($res24h,'a'),
 					'24h_btc' => round(arraySafeVal($res24h,'b',0), 8),
+                                        'networkhashrate' => $network_hash,
+					'totalblocks' => (int) arraySafeVal($totalblocks,'a'),
 					'lastblock' => $lastblock,
 					'timesincelast' => $timesincelast,
 				);

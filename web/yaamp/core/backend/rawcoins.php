@@ -8,11 +8,16 @@ function updateRawcoins()
 //	debuglog(__FUNCTION__);
 
 	exchange_set_default('alcurex', 'disabled', true);
-	exchange_set_default('binance', 'disabled', true);
+	        exchange_set_default('kraken', 'disabled', true);
+                exchange_set_default('cryptopia', 'disabled', true);
+                exchange_set_default('kucoin', 'disabled', true);
+                exchange_set_default('c-cex', 'disabled', true);
+
+	exchange_set_default('binance', 'disabled', false);
 	exchange_set_default('bter', 'disabled', true);
 	exchange_set_default('empoex', 'disabled', true);
-	exchange_set_default('coinbene', 'disabled', true);
-	exchange_set_default('coinexchange', 'disabled', true);
+	exchange_set_default('coinbene', 'disabled', false);
+	exchange_set_default('coinexchange', 'disabled', false);
 	exchange_set_default('coinsmarkets', 'disabled', true);
 	exchange_set_default('escodex', 'disabled', true);
 	exchange_set_default('gateio', 'disabled', true);
