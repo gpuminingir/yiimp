@@ -49,8 +49,10 @@ function yaamp_get_algos()
 		'x14',
 		'x15',
 		'x16r',
+		'x16rt',
 		'x16s',
 		'x17',
+		'x21s',
 		'x22i',
 		'xevan',
 		'groestl', // dmd-gr -m 256 (deprecated)
@@ -75,6 +77,7 @@ function yaamp_get_algos()
 		'yescryptR32',
 		'whirlpool',
 		'zr5',
+		'equihash_144',
 	);
 }
 
@@ -158,10 +161,12 @@ function getAlgoColors($algo)
 		'x12'		=> '#ffe090',
 		'x13'		=> '#ffd880',
 		'x14'		=> '#f0c080',
-		'x15'		=> '#f0b080',
+		'x15'		=> '#f0b030',
 		'x16r'		=> '#f0b080',
+		'x16rt'		=> '#f02010',
 		'x16s'		=> '#f0b080',
 		'x17'		=> '#f0b0a0',
+		'x21s'		=> '#f0a090',
 		'x22i'		=> '#f0a090',
 		'xevan'		=> '#f0b0a0',
 		'allium'	=> '#80a0d0',
@@ -213,6 +218,7 @@ function getAlgoColors($algo)
 		'yescryptR16'	=> '#e2d0e2',
 		'yescryptR32'	=> '#e2d0d2',
 		'zr5'		=> '#d0b0d0',
+		'equihash_144' 	=> '#e8e8e8',
 
 		'MN'		=> '#ffffff', // MasterNode Earnings
 		'PoS'		=> '#ffffff'  // Stake
@@ -243,8 +249,10 @@ function getAlgoPort($algo)
 		'x13'		=> 3633,
 		'x15'		=> 3733,
 		'x16r'		=> 3636,
+		'x16rt'		=> 3637,
 		'x16s'		=> 3663,
 		'x17'		=> 3737,
+		'x21s'		=> 3224,
 		'x22i'		=> 3223,
 		'aergo'		=> 3691,
 		'xevan'		=> 3739,
@@ -300,6 +308,7 @@ function getAlgoPort($algo)
 		'skunk'		=> 8433,
 		'tribus'	=> 8533,
 	        'a5a'   	=> 8633,
+		'equihash_144'	=> 5055,
 	);
 
 	global $configCustomPorts;

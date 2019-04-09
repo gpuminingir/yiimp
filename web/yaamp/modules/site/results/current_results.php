@@ -83,10 +83,16 @@ foreach($algos as $item)
 
 	if (!$coins) continue;
 
-	$workers = getdbocount('db_workers', "algo=:algo", array(':algo'=>$algo));
+	if($algo == "equihash_144"){
+		$snomp = get_snomp_api();
+		$workers = $snomp["workers"];
+		$hashrate = $snomp["hashrate"];				
+	}else{
+		$workers = getdbocount('db_workers', "algo=:algo", array(':algo'=>$algo));
+		$hashrate = controller()->memcache->get_database_scalar("current_hashrate-$algo",
+			"select hashrate from hashrate where algo=:algo order by time desc limit 1", array(':algo'=>$algo));
+	}
 
-	$hashrate = controller()->memcache->get_database_scalar("current_hashrate-$algo",
-		"select hashrate from hashrate where algo=:algo order by time desc limit 1", array(':algo'=>$algo));
 	$hashrate_sfx = $hashrate? Itoa2($hashrate).'h/s': '-';
 
 	$price = controller()->memcache->get_database_scalar("current_price-$algo",
@@ -182,3 +188,21 @@ echo "</div></div><br>";
 
 <?php endif; ?>
 
+
+<?
+function get_snomp_api(){
+	$url = 'http://localhost:8800/api/stats';
+	$ch = curl_init($url);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	$data = curl_exec($ch);
+	curl_close($ch);
+	$data = json_decode($data,true);
+	$api["hashrate"] = $data["pools"]["zelcash"]["poolStats"]["networkSolsString"];
+	$api["totalblocks"] = $data["pools"]["zelcash"]["blocks"]["confirmed"];
+	$api["workers"] =  $data["pools"]["zelcash"]["workerCount"];
+	return $api;
+}
+	
+?>

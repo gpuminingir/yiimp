@@ -55,7 +55,8 @@ echo <<<END
 <th data-sorter="numeric" align="right">Diff</th>
 <th align="right">Block</th>
 <th align="right">TTF***</th>
-<th data-sorter="numeric" align="right">Hash**</th>
+<th data-sorter="numeric" align="right">Pool Hash**</th>
+<th data-sorter="numeric" align="right">Net Hash**</th>
 <th data-sorter="currency" align="right">Profit*</th>
 </tr>
 </thead>
@@ -96,7 +97,10 @@ foreach($list as $coin)
 
 	$min_ttf = $coin->network_ttf>0? min($coin->actual_ttf, $coin->network_ttf): $coin->actual_ttf;
 	$network_hash = $coin->difficulty * 0x100000000 / ($min_ttf? $min_ttf: 60);
+        $network_hash2 = $network_hash? Itoa2($network_hash).'h/s': '';
+
 	$network_hash = $network_hash? 'network hash '.Itoa2($network_hash).'h/s': '';
+
 
 	if(controller()->admin && $services)
 	{
@@ -180,6 +184,7 @@ foreach($list as $coin)
 		echo "<td align=right style='font-size: .8em;' title='$network_hash' data='$pool_hash'>$pool_hash_sfx</td>";
 
 	$btcmhd = mbitcoinvaluetoa($btcmhd);
+        echo "<td align=right style='font-size: .8em;' data='$network_hash'><b>$network_hash2</b></td>";
 	echo "<td align=right style='font-size: .8em;' data='$btcmhd'><b>$btcmhd</b></td>";
 	echo "</tr>";
 }
