@@ -223,7 +223,7 @@ echo "</div></div><br>";
 <?php endif; ?>
 
 
-<?
+<?php
 function get_snomp_api(){
 	$url = 'http://localhost:8800/api/stats';
 	$ch = curl_init($url);
