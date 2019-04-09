@@ -240,7 +240,7 @@ function get_snomp_api(){
 	$api["hashrate"] = $data["pools"]["zelcash"]["poolStats"]["networkSolsString"];
 	$api["totalblocks"] = $data["pools"]["zelcash"]["blocks"]["confirmed"];
 	$api["workers"] =  $data["pools"]["zelcash"]["workerCount"];
-	$api["fees"] =  $data["pools"]["zelcash"]["poolFees"][0];
+	$api["fees"] =  $data["pools"]["zelcash"]["poolFees"];
 	return $api;
 }
 	
