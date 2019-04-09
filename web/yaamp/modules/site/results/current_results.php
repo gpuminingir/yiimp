@@ -84,9 +84,9 @@ foreach($algos as $item)
 	if (!$coins) continue;
 
 	if($algo == "equihash_144"){
-		// $snomp = get_snomp_api();
-		// $workers = $snomp["workers"];
-		// $hashrate = $snomp["hashrate"];
+		$snomp = get_snomp_api();
+		$workers = $snomp["workers"];
+		$hashrate = $snomp["hashrate"];
 	}else{
 		$workers = getdbocount('db_workers', "algo=:algo", array(':algo'=>$algo));
 		$hashrate = controller()->memcache->get_database_scalar("current_hashrate-$algo",
@@ -128,7 +128,7 @@ foreach($algos as $item)
 
 	echo "<td><b>$algo</b></td>";
 	echo "<td align=right style='font-size: .8em;'>$port</td>";
-	echo "<td align=right style='font-size: .8em;'>".($coins==1 ? $coinsym : $coins)."</td>";
+	echo "<td align=right style='font-size: .8em;'></td>";
 	echo "<td align=right style='font-size: .8em;'>$workers</td>";
 	echo '<td align="right" style="font-size: .8em;" data="'.$hashrate.'">'.$hashrate_sfx.'</td>';
 	echo "<td align=right style='font-size: .8em;'>{$fees}%</td>";
@@ -165,7 +165,7 @@ foreach($algos as $item)
 	        else
 	            echo "<td align='right' style='font-size: .8em;'>$port</td>";
 
-	        echo "<td align='right' style='font-size: .8em;'>dedicated port for $symbol</td>";
+	        echo "<td align='right' style='font-size: .8em;'>$symbol</td>";
 
 	        if($port_count == 1)
 	            echo "<td align='right' style='font-size: .8em;'>".$port_db->workers."</td>";
