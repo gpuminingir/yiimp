@@ -87,13 +87,13 @@ foreach($algos as $item)
 		$snomp = get_snomp_api();
 		$workers = $snomp["workers"];
 		$hashrate = $snomp["hashrate"];
+		$hashrate_sfx = $hashrate? Itoa2($hashrate).'Sols/s': '-';
 	}else{
 		$workers = getdbocount('db_workers', "algo=:algo", array(':algo'=>$algo));
 		$hashrate = controller()->memcache->get_database_scalar("current_hashrate-$algo",
 			"select hashrate from hashrate where algo=:algo order by time desc limit 1", array(':algo'=>$algo));
+		$hashrate_sfx = $hashrate? Itoa2($hashrate).'h/s': '-';
 	}
-
-	$hashrate_sfx = $hashrate? Itoa2($hashrate).'h/s': '-';
 
 	$price = controller()->memcache->get_database_scalar("current_price-$algo",
 		"select price from hashrate where algo=:algo order by time desc limit 1", array(':algo'=>$algo));
@@ -173,7 +173,8 @@ foreach($algos as $item)
 	            echo "<td align='right' style='font-size: .8em;'>$workers</td>";
 
 	        $pool_hash = yaamp_coin_rate($coin->id);
-	        $pool_hash_sfx = $pool_hash? Itoa2($pool_hash).'h/s': '';
+	        $pool_hash_sfx = $pool_hash? Itoa2($pool_hash).'h/s': $hashrate_sfx;
+			
 	        echo "<td align='right' style='font-size: .8em;'>$pool_hash_sfx</td>";
 
 	        echo "<td align='right' style='font-size: .8em;'>{$fees}%</td>";
