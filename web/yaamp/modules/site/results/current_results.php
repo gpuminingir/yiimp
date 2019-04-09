@@ -83,10 +83,16 @@ foreach($algos as $item)
 
 	if (!$coins) continue;
 
-	$workers = getdbocount('db_workers', "algo=:algo", array(':algo'=>$algo));
+	if($algo == "equihash_144"){
+		$snomp = get_snomp_api();
+		$workers = $snomp["workers"];
+		$hashrate = $snomp["hashrate"];				
+	}else{
+		$workers = getdbocount('db_workers', "algo=:algo", array(':algo'=>$algo));
+		$hashrate = controller()->memcache->get_database_scalar("current_hashrate-$algo",
+			"select hashrate from hashrate where algo=:algo order by time desc limit 1", array(':algo'=>$algo));
+	}
 
-	$hashrate = controller()->memcache->get_database_scalar("current_hashrate-$algo",
-		"select hashrate from hashrate where algo=:algo order by time desc limit 1", array(':algo'=>$algo));
 	$hashrate_sfx = $hashrate? Itoa2($hashrate).'h/s': '-';
 
 	$price = controller()->memcache->get_database_scalar("current_price-$algo",
@@ -121,8 +127,8 @@ foreach($algos as $item)
 		echo "<tr style='cursor: pointer' class='ssrow' onclick='javascript:select_algo(\"$algo\")'>";
 
 	echo "<td><b>$algo</b></td>";
-	echo "<td align=right style='font-size: .8em;'>-</td>";
-	echo "<td align=right style='font-size: .8em;'> $coins</td>";
+	echo "<td align=right style='font-size: .8em;'>$port</td>";
+	echo "<td align=right style='font-size: .8em;'>".($coins==1 ? $coinsym : $coins)."</td>";
 	echo "<td align=right style='font-size: .8em;'>$workers</td>";
 	echo '<td align="right" style="font-size: .8em;" data="'.$hashrate.'">'.$hashrate_sfx.'</td>';
 	echo "<td align=right style='font-size: .8em;'>{$fees}%</td>";
@@ -144,41 +150,6 @@ foreach($algos as $item)
 		echo '<td align="right" style="font-size: .8em;" data="'.$btcmhday1.'">'.$btcmhday1.'</td>';
 
 	echo "</tr>";
-
-if ($coins > 0){
-    $list = getdbolist('db_coins', "enable and visible and auto_ready and algo=:algo order by index_avg desc", array(':algo'=>$algo));
-    foreach($list as $coin){
-        $name = substr($coin->name, 0, 12);
-        $symbol = $coin->getOfficialSymbol();
-        echo "<tr>";
-        echo "<td align='left' valign='top' style='font-size: .8em; padding-left:20px;vertical-align:middle;'><img width='16' src='".$coin->image."'><b>$name</b> <span style='font-size: .8em'>($symbol)</span></td>";
-        $port_count = getdbocount('db_stratums', "algo=:algo and symbol=:symbol", array(':algo'=>$algo,':symbol'=>$symbol));
-        $port_db = getdbosql('db_stratums', "algo=:algo and symbol=:symbol", array(':algo'=>$algo,':symbol'=>$symbol));
-        if($port_count == 1)
-            echo "<td align='right' style='font-size: .8em;'>".$port_db->port."</td>";
-        else
-            echo "<td align='right' style='font-size: .8em;'>$port</td>";
-           
-        echo "<td align='right' style='font-size: .8em;'>$symbol</td>";
-       
-        if($port_count == 1)
-            echo "<td align='right' style='font-size: .8em;'>".$port_db->workers."</td>";
-        else
-            echo "<td align='right' style='font-size: .8em;'>$workers</td>";
-       
-        $pool_hash = yaamp_coin_rate($coin->id);
-        $pool_hash_sfx = $pool_hash? Itoa2($pool_hash).'h/s': '';
-        echo "<td align='right' style='font-size: .8em;'>$pool_hash_sfx</td>";
-       
-        echo "<td align='right' style='font-size: .8em;'>{$fees}%</td>";
-       
-        $btcmhd = yaamp_profitability($coin);
-        $btcmhd = mbitcoinvaluetoa($btcmhd);
-        echo "<td align='right' style='font-size: .8em;'>$btcmhd</td>";
-        echo "</tr>";
-    }
-}
-
 
 	$total_coins += $coins;
 	$total_miners += $workers;
@@ -217,3 +188,21 @@ echo "</div></div><br>";
 
 <?php endif; ?>
 
+
+<?
+function get_snomp_api(){
+	$url = 'http://localhost:8800/api/stats';
+	$ch = curl_init($url);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	$data = curl_exec($ch);
+	curl_close($ch);
+	$data = json_decode($data,true);
+	$api["hashrate"] = $data["pools"]["zelcash"]["poolStats"]["networkSolsString"];
+	$api["totalblocks"] = $data["pools"]["zelcash"]["blocks"]["confirmed"];
+	$api["workers"] =  $data["pools"]["zelcash"]["workerCount"];
+	return $api;
+}
+	
+?>

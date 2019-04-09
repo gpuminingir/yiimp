@@ -173,6 +173,14 @@ function BackendCoinsUpdate()
 				$coin->auto_ready = ($coin->connections > 0);
 			}
 
+			// GET REWARDS FOR ZEL
+
+            else if($coin->symbol == 'ZEL') {
+                    // coinbasevalue here is the amount available for miners, not the full block amount
+                    $coin->reward = arraySafeVal($template,'miner_reward')/100000000 * $coin->reward_mul;
+                    $coin->charity_amount = $coin->reward * $coin->charity_percent / 100;
+            }
+
 			else if(strcasecmp($remote->error, 'method not found') == 0)
 			{
 				$template = $remote->getmemorypool();
