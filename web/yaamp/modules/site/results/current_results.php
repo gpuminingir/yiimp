@@ -183,7 +183,7 @@ foreach($algos as $item)
 	        echo "<td align='right' style='font-size: .8em;'>$btcmhd</td>";
 	        echo "</tr>";
 	    }
-
+	}
 
 	$total_coins += $coins;
 	$total_miners += $workers;
