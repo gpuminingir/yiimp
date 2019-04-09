@@ -87,7 +87,7 @@ foreach($algos as $item)
 		$snomp = get_snomp_api();
 		$workers = $snomp["workers"];
 		$hashrate = $snomp["hashrate"];
-		$hashrate = $snomp["fees"];
+//		$fees = $snomp["fees"];
 		$hashrate_sfx = $hashrate? Itoa2($hashrate).' Sols/s': '-';
 		
 	}else{
@@ -240,7 +240,7 @@ function get_snomp_api(){
 	$api["hashrate"] = $data["pools"]["zelcash"]["poolStats"]["networkSolsString"];
 	$api["totalblocks"] = $data["pools"]["zelcash"]["blocks"]["confirmed"];
 	$api["workers"] =  $data["pools"]["zelcash"]["workerCount"];
-	$api["fees"] =  $data["pools"]["zelcash"]["poolFees"];
+//	$api["fees"] =  $data["pools"]["zelcash"]["poolFees"];
 	return $api;
 }
 	
