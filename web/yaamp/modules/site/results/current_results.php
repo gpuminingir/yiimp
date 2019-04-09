@@ -87,12 +87,15 @@ foreach($algos as $item)
 		$snomp = get_snomp_api();
 		$workers = $snomp["workers"];
 		$hashrate = $snomp["hashrate"];
-		$hashrate_sfx = $hashrate? Itoa2($hashrate).'Sols/s': '-';
+		$hashrate = $snomp["fees"];
+		$hashrate_sfx = $hashrate? Itoa2($hashrate).' Sols/s': '-';
+		
 	}else{
 		$workers = getdbocount('db_workers', "algo=:algo", array(':algo'=>$algo));
 		$hashrate = controller()->memcache->get_database_scalar("current_hashrate-$algo",
 			"select hashrate from hashrate where algo=:algo order by time desc limit 1", array(':algo'=>$algo));
 		$hashrate_sfx = $hashrate? Itoa2($hashrate).'h/s': '-';
+		$fees = yaamp_fee($algo);
 	}
 
 	$price = controller()->memcache->get_database_scalar("current_price-$algo",
@@ -118,7 +121,7 @@ foreach($algos as $item)
 	$algo_unit_factor = yaamp_algo_mBTC_factor($algo);
 	$btcmhday1 = $hashrate1 != 0? mbitcoinvaluetoa($total1 / $hashrate1 * 1000000 * 1000 * $algo_unit_factor): '';
 
-	$fees = yaamp_fee($algo);
+
 	$port = getAlgoPort($algo);
 
 	if($defaultalgo == $algo)
@@ -237,6 +240,7 @@ function get_snomp_api(){
 	$api["hashrate"] = $data["pools"]["zelcash"]["poolStats"]["networkSolsString"];
 	$api["totalblocks"] = $data["pools"]["zelcash"]["blocks"]["confirmed"];
 	$api["workers"] =  $data["pools"]["zelcash"]["workerCount"];
+	$api["fees"] =  $data["pools"]["zelcash"]["poolFees"][0];
 	return $api;
 }
 	
