@@ -124,6 +124,21 @@ class ApiController extends CommonController
 				$symbol = $coin->symbol;
 				$algo = $coin->algo;
 				
+
+				$last = dborow("SELECT height, time FROM blocks ".
+					"WHERE coin_id=:id AND category IN ('immature','generate') ORDER BY height DESC LIMIT 1",
+					array(':id'=>$coin->id)
+				);
+				$lastblock = (int) arraySafeVal($last,'height');
+				$timesincelast = $timelast = (int) arraySafeVal($last,'time');
+				if ($timelast > 0) $timesincelast = time() - $timelast;
+				$since = $timelast ? $timelast : time() - 60*60;
+				$t24 = time() - 24*60*60;
+				
+				
+				
+				
+				
 				
 				if($algo == "equihash_144"){
 					$snomp = get_snomp_api_poolStatus();
@@ -156,20 +171,6 @@ class ApiController extends CommonController
 
 
 
-				$last = dborow("SELECT height, time FROM blocks ".
-					"WHERE coin_id=:id AND category IN ('immature','generate') ORDER BY height DESC LIMIT 1",
-					array(':id'=>$coin->id)
-				);
-				$lastblock = (int) arraySafeVal($last,'height');
-				$timesincelast = $timelast = (int) arraySafeVal($last,'time');
-				if ($timelast > 0) $timesincelast = time() - $timelast;
-
-
-
-				$since = $timelast ? $timelast : time() - 60*60;
-
-
-				$t24 = time() - 24*60*60;
 				$res24h = controller()->memcache->get_database_row("history_item2-{$coin->id}-{$coin->algo}",
 					"SELECT COUNT(id) as a, SUM(amount*price) as b FROM blocks ".
 					"WHERE coin_id=:id AND NOT category IN ('orphan','stake','generated') AND time>$t24 AND algo=:algo",
