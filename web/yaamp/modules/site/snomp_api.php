@@ -16,7 +16,7 @@ function get_snomp_api_poolStatus(){
 	$data = curl_exec($ch);
 	curl_close($ch);
 	$data = json_decode($data,true);
-	$api["poolhashrate"] = $data["pools"]["zelcash"]["hashrate"];
+	$api["poolhashrate"] = $data["pools"]["zelcash"]["hashrate"]/500000;
 	$api["nethashrate"] = $data["pools"]["zelcash"]["poolStats"]["networkSols"];
 	$api["shares"] = $data["pools"]["zelcash"]["shareCount"];
 	$api["totalblocks"] = $data["pools"]["zelcash"]["blocks"]["confirmed"];
