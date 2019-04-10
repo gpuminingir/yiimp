@@ -18,7 +18,7 @@ function get_snomp_api_poolStatus(){
 	$data = json_decode($data,true);
 	$api["poolhashrate"] = $data["pools"]["zelcash"]["hashrateString"];
 	$api["nethashrate"] = $data["pools"]["zelcash"]["poolStats"]["networkSols"];
-	$api["nethashrate"] = $data["pools"]["zelcash"]["poolStats"]["networkSols"];
+	$api["shares"] = $data["pools"]["zelcash"]["shareCount"];
 	$api["totalblocks"] = $data["pools"]["zelcash"]["blocks"]["confirmed"];
 	$api["workers"] =  $data["pools"]["zelcash"]["workerCount"];
 	$api["fees"] =  $data["pools"]["zelcash"]["poolFees"][""];
@@ -36,6 +36,7 @@ function get_snomp_api_wallet($wallet){
 	$data = json_decode($data,true);
 	$api["total"] = $data["paid"];
 	$api["unpaid"] = $data["balance"];
+	
 	return $api;
 }
 	

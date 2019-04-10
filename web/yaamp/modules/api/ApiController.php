@@ -1,5 +1,7 @@
 <?php
 
+include('/var/web/yaamp/modules/site/snomp_api.php');
+
 class ApiController extends CommonController
 {
 	public $defaultAction='status';
@@ -120,6 +122,39 @@ class ApiController extends CommonController
 			foreach ($coins as $coin)
 			{
 				$symbol = $coin->symbol;
+				$algo = $coin->algo;
+				
+				
+				if($algo == "equihash_144"){
+					$snomp = get_snomp_api_poolStatus();
+					$workers = $snomp["workers"];
+					$algo_hashrate = $snomp["poolhashrate"];
+					$fees = $snomp["fees"];
+					$shares = $snomp["shares"];
+					$hashrate_sfx = $hashrate? Itoa2($hashrate).'': '-';
+					$factor=0;
+				}else{
+					$workers = (int) dboscalar("SELECT count(W.userid) AS workers FROM workers W ".
+						"INNER JOIN accounts A ON A.id = W.userid ".
+						"WHERE W.algo=:algo AND A.coinid IN (:id, 6)", // 6: btc id
+						array(':algo'=>$coin->algo, ':id'=>$coin->id)
+					);
+					$shares = dborow("SELECT count(id) AS shares, SUM(difficulty) AS coin_hr FROM shares WHERE time>$since AND algo=:algo AND coinid IN (0,:id)",
+						array(':id'=>$coin->id,':algo'=>$coin->algo)
+					);
+					if ($workers > 0) {
+						$algohr = (double) dboscalar("SELECT SUM(difficulty) AS algo_hr FROM shares WHERE time>$since AND algo=:algo",array(':algo'=>$coin->algo));
+						$factor = ($algohr > 0 && !empty($shares)) ? (double) $shares['coin_hr'] / $algohr : 1.;
+						$algo_hashrate = controller()->memcache->get_database_scalar("api_status_hashrate-{$coin->algo}",
+							"SELECT hashrate FROM hashrate WHERE algo=:algo ORDER BY time DESC LIMIT 1", array(':algo'=>$coin->algo)
+						);
+
+					} else {
+						$factor = $algo_hashrate = 0;
+					}
+				}
+
+
 
 				$last = dborow("SELECT height, time FROM blocks ".
 					"WHERE coin_id=:id AND category IN ('immature','generate') ORDER BY height DESC LIMIT 1",
@@ -129,16 +164,10 @@ class ApiController extends CommonController
 				$timesincelast = $timelast = (int) arraySafeVal($last,'time');
 				if ($timelast > 0) $timesincelast = time() - $timelast;
 
-				$workers = (int) dboscalar("SELECT count(W.userid) AS workers FROM workers W ".
-					"INNER JOIN accounts A ON A.id = W.userid ".
-					"WHERE W.algo=:algo AND A.coinid IN (:id, 6)", // 6: btc id
-					array(':algo'=>$coin->algo, ':id'=>$coin->id)
-				);
+
 
 				$since = $timelast ? $timelast : time() - 60*60;
-				$shares = dborow("SELECT count(id) AS shares, SUM(difficulty) AS coin_hr FROM shares WHERE time>$since AND algo=:algo AND coinid IN (0,:id)",
-					array(':id'=>$coin->id,':algo'=>$coin->algo)
-				);
+
 
 				$t24 = time() - 24*60*60;
 				$res24h = controller()->memcache->get_database_row("history_item2-{$coin->id}-{$coin->algo}",
@@ -154,37 +183,27 @@ class ApiController extends CommonController
 
 				// Coin hashrate, we only store the hashrate per algo in the db,
 				// we need to compute the % of the coin compared to others with the same algo
-				if ($workers > 0) {
 
-					$algohr = (double) dboscalar("SELECT SUM(difficulty) AS algo_hr FROM shares WHERE time>$since AND algo=:algo",array(':algo'=>$coin->algo));
-					$factor = ($algohr > 0 && !empty($shares)) ? (double) $shares['coin_hr'] / $algohr : 1.;
-					$algo_hashrate = controller()->memcache->get_database_scalar("api_status_hashrate-{$coin->algo}",
-						"SELECT hashrate FROM hashrate WHERE algo=:algo ORDER BY time DESC LIMIT 1", array(':algo'=>$coin->algo)
-					);
-
-				} else {
-					$factor = $algo_hashrate = 0;
-				}
 
 				$network_hash = controller()->memcache->get("yiimp-nethashrate-{$coin->symbol}");
-	if (!$network_hash) {
-		$remote = new WalletRPC($coin);
-		if ($remote)
-			$info = $remote->getmininginfo();
-		if (isset($info['networkhashps'])) {
-			$network_hash = $info['networkhashps'];
-			controller()->memcache->set("yiimp-nethashrate-{$coin->symbol}", $info['networkhashps'], 60);
-		}
-		else if (isset($info['netmhashps'])) {
-			$network_hash = floatval($info['netmhashps']) * 1e6;
-			controller()->memcache->set("yiimp-nethashrate-{$coin->symbol}", $coin->network_hash, 60);
-		}
-	}
+				if (!$network_hash) {
+					$remote = new WalletRPC($coin);
+					if ($remote)
+						$info = $remote->getmininginfo();
+					if (isset($info['networkhashps'])) {
+						$network_hash = $info['networkhashps'];
+						controller()->memcache->set("yiimp-nethashrate-{$coin->symbol}", $info['networkhashps'], 60);
+					}
+					else if (isset($info['netmhashps'])) {
+						$network_hash = floatval($info['netmhashps']) * 1e6;
+						controller()->memcache->set("yiimp-nethashrate-{$coin->symbol}", $coin->network_hash, 60);
+					}
+				}
 
 				$btcmhd = yaamp_profitability($coin);
 				$btcmhd = mbitcoinvaluetoa($btcmhd);
 
-				$algo = $coin->algo;
+
 			        $port_db = getdbosql('db_stratums', "algo=:algo and symbol=:symbol", array(':algo'=>$algo,':symbol'=>$symbol));
 //$port_db = implode(",",$port_db);
 //                                        'port' => getAlgoPort($coin->algo),
