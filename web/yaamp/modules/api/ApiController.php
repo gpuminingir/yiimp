@@ -136,17 +136,13 @@ class ApiController extends CommonController
 				$t24 = time() - 24*60*60;
 				
 				
-				
-				
-				
-				
 				if($algo == "equihash_144"){
 					$snomp = get_snomp_api_poolStatus();
 					$workers = $snomp["workers"];
 					$algo_hashrate = $snomp["poolhashrate"];
 					$fees = $snomp["fees"];
 					$shares = $snomp["shares"];
-					$hashrate_sfx = $hashrate? Itoa2($hashrate).'': '-';
+					$hashrate_sfx = $algo_hashrate;
 					$factor=0;
 				}else{
 					$workers = (int) dboscalar("SELECT count(W.userid) AS workers FROM workers W ".
