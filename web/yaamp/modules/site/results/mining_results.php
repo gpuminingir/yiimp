@@ -91,11 +91,11 @@ foreach($list as $coin)
 		$snomp = get_snomp_api_poolStatus();
 		$pool_hash = $snomp["poolhashrate"]*500000;
 		$real_ttf = $pool_hash? $coin->difficulty * 0x100000000 / $pool_hash: 0;
-		$pool_hash_sfx = $pool_hash? Itoa2($pool_hash).'Sols/s': '';
+		$pool_hash_sfx = $pool_hash? Itoa2($pool_hash/500000).'Sols/s': '';
 	}else{
 		$pool_hash = yaamp_coin_rate($coin->id);		
 		$real_ttf = $pool_hash? $coin->difficulty * 0x100000000 / $pool_hash: 0;
-		$pool_hash_sfx = $pool_hash? Itoa2($pool_hash).'Sols/s': '';
+		$pool_hash_sfx = $pool_hash? Itoa2($pool_hash).'h/s': '';
 	}
 
 	$btcmhd = yaamp_profitability($coin);
