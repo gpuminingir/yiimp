@@ -1,5 +1,7 @@
 <?php
 
+include('../../snomp/snomp_api.php');
+
 $defaultalgo = user()->getState('yaamp-algo');
 
 echo "<div class='main-left-box'>";
@@ -88,7 +90,7 @@ foreach($algos as $item)
 		$workers = $snomp["workers"];
 		$hashrate = $snomp["hashrate"];
 //		$fees = $snomp["fees"];
-		$hashrate_sfx = $hashrate? Itoa2($hashrate).' Sols/s': '-';
+		$hashrate_sfx = $hashrate? Itoa2($hashrate).'': '-';
 		
 	}else{
 		$workers = getdbocount('db_workers', "algo=:algo", array(':algo'=>$algo));
@@ -225,23 +227,3 @@ echo "</div></div><br>";
 </style>
 
 <?php endif; ?>
-
-
-<?php
-function get_snomp_api(){
-	$url = 'http://localhost:8800/api/stats';
-	$ch = curl_init($url);
-	curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	$data = curl_exec($ch);
-	curl_close($ch);
-	$data = json_decode($data,true);
-	$api["hashrate"] = $data["pools"]["zelcash"]["poolStats"]["networkSolsString"];
-	$api["totalblocks"] = $data["pools"]["zelcash"]["blocks"]["confirmed"];
-	$api["workers"] =  $data["pools"]["zelcash"]["workerCount"];
-//	$api["fees"] =  $data["pools"]["zelcash"]["poolFees"];
-	return $api;
-}
-	
-?>
