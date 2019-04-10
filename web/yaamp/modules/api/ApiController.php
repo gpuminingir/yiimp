@@ -142,7 +142,7 @@ class ApiController extends CommonController
 					$algo_hashrate = $snomp["poolhashrate"];
 					$fees = $snomp["fees"];
 					$shares = $snomp["shares"];
-					$totalblocks = $snomp["totalblocks"];
+					$totalblocks = ["a",$snomp["totalblocks"]];
 					$hashrate_sfx = $algo_hashrate;
 					$factor=0;
 				}else{
