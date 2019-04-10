@@ -89,10 +89,9 @@ foreach($list as $coin)
 
 	if($algo == "equihash_144"){
 		$snomp = get_snomp_api_poolStatus();
-		$workers = $snomp["workers"];
 		$pool_hash = $snomp["poolhashrate"];
-		$fees = $snomp["fees"];
-		$hashrate_sfx = $hashrate? Itoa2($hashrate).'': '-';
+		$real_ttf = $pool_hash? $coin->difficulty * 0x100000000 / $pool_hash: 0;
+		$pool_hash_sfx = $pool_hash? Itoa2($pool_hash).'Sols/s': '';
 	}else{
 		$pool_hash = yaamp_coin_rate($coin->id);		
 		$real_ttf = $pool_hash? $coin->difficulty * 0x100000000 / $pool_hash: 0;
