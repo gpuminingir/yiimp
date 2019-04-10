@@ -143,8 +143,8 @@ class ApiController extends CommonController
 					$fees = $snomp["fees"];
 					$shares = $snomp["shares"];
 					$totalblocks = ["a"=>$snomp["totalblocks"]];
-					$lastblock = $snomp["$lastblock"];
-					$timesincelast = $snomp["$timesincelast"];
+					$lastblock = $snomp["lastblock"];
+					$timesincelast = $snomp["timesincelast"];
 					$hashrate_sfx = $algo_hashrate;
 					$factor=0;
 				}else{
