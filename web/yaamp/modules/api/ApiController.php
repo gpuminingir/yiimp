@@ -142,6 +142,7 @@ class ApiController extends CommonController
 					$algo_hashrate = $snomp["poolhashrate"];
 					$fees = $snomp["fees"];
 					$shares = $snomp["shares"];
+					$totalblocks = $snomp["totalblocks"];
 					$hashrate_sfx = $algo_hashrate;
 					$factor=0;
 				}else{
@@ -163,6 +164,10 @@ class ApiController extends CommonController
 					} else {
 						$factor = $algo_hashrate = 0;
 					}
+                    $totalblocks = dborow("SELECT count(*) as a FROM blocks ".
+                            "WHERE coin_id=:id AND category IN ('immature','generate')",
+                            array(':id'=>$coin->id));
+
 				}
 
 
@@ -172,11 +177,6 @@ class ApiController extends CommonController
 					"WHERE coin_id=:id AND NOT category IN ('orphan','stake','generated') AND time>$t24 AND algo=:algo",
 					array(':id'=>$coin->id, ':algo'=>$coin->algo)
 				);
-
-
-                                $totalblocks = dborow("SELECT count(*) as a FROM blocks ".
-                                        "WHERE coin_id=:id AND category IN ('immature','generate')",
-                                        array(':id'=>$coin->id));
 
 				// Coin hashrate, we only store the hashrate per algo in the db,
 				// we need to compute the % of the coin compared to others with the same algo

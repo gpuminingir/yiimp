@@ -4,7 +4,7 @@ if(isset($_REQUEST["action"])) $action=$_REQUEST["action"]; else $action=false;
 
 
 if($action=="dump"){
-	vardump(get_snomp_api_poolStatus());
+	var_dump(get_snomp_api_poolStatus());
 }
 	
 function get_snomp_api_poolStatus(){
