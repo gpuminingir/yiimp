@@ -16,10 +16,12 @@ function get_snomp_api_poolStatus(){
 	$data = curl_exec($ch);
 	curl_close($ch);
 	$data = json_decode($data,true);
-	$api["poolhashrate"] = $data["pools"]["zelcash"]["hashrateString"];
+	$api["poolhashrate"] = $data["pools"]["zelcash"]["hashrate"];
 	$api["nethashrate"] = $data["pools"]["zelcash"]["poolStats"]["networkSols"];
 	$api["shares"] = $data["pools"]["zelcash"]["shareCount"];
 	$api["totalblocks"] = $data["pools"]["zelcash"]["blocks"]["confirmed"];
+	$api["lastblock"] = $data["pools"]["zelcash"]["blocks"]["lastblock"];
+	$api["timesincelast"] = $data["pools"]["zelcash"]["blocks"]["timesincelast"];
 	$api["workers"] =  $data["pools"]["zelcash"]["workerCount"];
 	$api["fees"] =  $data["pools"]["zelcash"]["poolFees"][""];
 	return $api;
