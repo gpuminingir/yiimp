@@ -83,13 +83,13 @@ foreach($list as $coin)
 	$price = bitcoinvaluetoa($coin->price);
 	$height = number_format($coin->block_height, 0, '.', ' ');
 //	$pool_ttf = $coin->pool_ttf? sectoa2($coin->pool_ttf): '';
-	$pool_ttf = $total_rate? $coin->difficulty * 0x100000000 / $total_rate: 0;
+	$pool_ttf = $total_rate ? $coin->difficulty * 0x100000000 / $total_rate: 0;
 	$reward = round($coin->reward, 3);
 	$algo = $coin->algo;
 
 	if($algo == "equihash_144"){
 		$snomp = get_snomp_api_poolStatus();
-		$pool_hash = $snomp["poolhashrate"];
+		$pool_hash = $snomp["poolhashrate"]*500000;
 		$real_ttf = $pool_hash? $coin->difficulty * 0x100000000 / $pool_hash: 0;
 		$pool_hash_sfx = $pool_hash? Itoa2($pool_hash).'Sols/s': '';
 	}else{
