@@ -1,6 +1,6 @@
 <?php
 
-include('../../snomp/snomp_api.php');
+include('/var/web/yaamp/modules/site/snomp_api.php');
 
 $defaultalgo = user()->getState('yaamp-algo');
 
@@ -86,10 +86,11 @@ foreach($algos as $item)
 	if (!$coins) continue;
 
 	if($algo == "equihash_144"){
-		$snomp = get_snomp_api();
+		$snomp = get_snomp_api_poolStatus();
+		
 		$workers = $snomp["workers"];
-		$hashrate = $snomp["hashrate"];
-//		$fees = $snomp["fees"];
+		$hashrate = $snomp["poolhashrate"];
+		$fees = $snomp["fees"];
 		$hashrate_sfx = $hashrate? Itoa2($hashrate).'': '-';
 		
 	}else{
