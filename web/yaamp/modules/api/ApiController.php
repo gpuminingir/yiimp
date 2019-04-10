@@ -146,7 +146,7 @@ class ApiController extends CommonController
 					$lastblock = $snomp["lastblock"];
 					$timesincelast = $snomp["timesincelast"];
 					$hashrate_sfx = $algo_hashrate;
-					$factor=0;
+					$factor=1;
 				}else{
 					$workers = (int) dboscalar("SELECT count(W.userid) AS workers FROM workers W ".
 						"INNER JOIN accounts A ON A.id = W.userid ".
