@@ -1,7 +1,5 @@
 <?php
 
-include('/var/web/yaamp/modules/site/snomp_api.php');
-
 class ApiController extends CommonController
 {
 	public $defaultAction='status';
@@ -104,6 +102,8 @@ class ApiController extends CommonController
 
 	public function actionCurrencies()
 	{
+		include('/var/web/yaamp/modules/site/snomp_api.php');
+		
 		$client_ip = arraySafeVal($_SERVER,'REMOTE_ADDR');
 		$whitelisted = isAdminIP($client_ip);
 		if (!$whitelisted && is_file(YAAMP_LOGS.'/overloaded')) {
