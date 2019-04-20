@@ -136,7 +136,7 @@ foreach($algos as $item)
 	echo "<td align=right style='font-size: .8em;'></td>";
 	echo "<td align=right style='font-size: .8em;'></td>";
 	echo "<td align=right style='font-size: .8em;'>$workers</td>";
-	echo '<td align="right" style="font-size: .8em;" data="'.$hashrate.'">'.$hashrate_sfx.'</td>';
+	echo '<td align="right" style="font-size: .8em;" data="'.$hashrate.'">-</td>';
 	echo "<td align=right style='font-size: .8em;'>{$fees}%</td>";
 
 	if($algo == $best_algo)
