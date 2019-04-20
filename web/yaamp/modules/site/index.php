@@ -33,7 +33,7 @@ $payout_freq = (YAAMP_PAYMENTS_FREQ / 3600)." hours";
 
 <ul>
 
-<li>استخر ایرانی برای الگریتم های AltCoin</li>
+<li>استخر Alt-Coin در داخل ایران</li>
 
 <br/>
 
