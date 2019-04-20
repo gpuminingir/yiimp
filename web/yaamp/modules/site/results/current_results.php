@@ -179,7 +179,7 @@ foreach($algos as $item)
 	            echo "<td align='right' style='font-size: .8em;'>$workers</td>";
 
 	        $pool_hash = yaamp_coin_rate($coin->id);
-	        $pool_hash_sfx = $pool_hash? Itoa2($pool_hash).'h/s': $hashrate_sfx;
+	        $pool_hash_sfx = $pool_hash? Itoa2($pool_hash).'h/s': "-";
 			
 	        echo "<td align='right' style='font-size: .8em;'>$pool_hash_sfx</td>";
 
