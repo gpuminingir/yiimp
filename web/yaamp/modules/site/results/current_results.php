@@ -128,7 +128,7 @@ foreach($algos as $item)
 	$port = getAlgoPort($algo);
 
 	if($defaultalgo == $algo)
-		echo "<tr style='cursor: pointer; background-color: #e0d3e8;' onclick='javascript:select_algo(\"$algo\")'>";
+		echo "<tr style='border-bottom:1pt solid black;cursor: pointer; background-color: #e0d3e8;' onclick='javascript:select_algo(\"$algo\")'>";
 	else
 		echo "<tr style='cursor: pointer' class='ssrow' onclick='javascript:select_algo(\"$algo\")'>";
 
