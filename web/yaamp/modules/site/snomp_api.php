@@ -7,7 +7,7 @@ if($action=="dump"){
 	var_dump(get_snomp_api_poolStatus());
 }
 	
-function get_snomp_api_poolStatus($coinname){
+function get_snomp_api_poolStatus(){
 	$url = 'http://localhost:8800/api/stats';
 	$ch = curl_init($url);
 	curl_setopt($ch, CURLOPT_TIMEOUT, 5);
