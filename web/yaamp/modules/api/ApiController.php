@@ -137,7 +137,7 @@ class ApiController extends CommonController
 				
 				
 				if($algo == "equihash_144"){
-					$snomp = get_snomp_api_poolStatus("zelcash");
+					$snomp = get_snomp_api_poolStatus();
 					$workers = $snomp["workers"];
 					$algo_hashrate = $snomp["poolhashrate"];
 					$fees = $snomp["fees"];
