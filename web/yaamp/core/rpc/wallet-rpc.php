@@ -198,6 +198,12 @@ class WalletRPC {
 				unset($res["mi"]);
 				$this->error = $this->rpc->error;
 				break;
+			case "getblocksubsidy":
+					$res = $this->rpc->getblocksubsidy();
+					$res["miner_reward"] = arraySafeVal($res,"miner");
+					$res["founders_reward"] = arraySafeVal($res,"founders");
+					$this->error = $this->rpc->error;
+					break;
 			case 'getaccountaddress':
 				$res = $this->rpc_wallet->getaddress();
 				$res = objSafeVal($res, "address");
