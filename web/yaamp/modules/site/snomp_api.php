@@ -16,14 +16,14 @@ function get_snomp_api_poolStatus($coinname){
 	$data = curl_exec($ch);
 	curl_close($ch);$coinname
 	$data = json_decode($data,true);
-	$api["poolhashrate"] = $data["pools"][$coinname]["hashrate"]/500000;
-	$api["nethashrate"] = $data["pools"][$coinname]["poolStats"]["networkSols"];
-	$api["shares"] = $data["pools"][$coinname]["shareCount"];
-	$api["totalblocks"] = $data["pools"][$coinname]["blocks"]["confirmed"];
-	$api["lastblock"] = $data["pools"][$coinname]["blocks"]["lastblock"];
-	$api["timesincelast"] = $data["pools"][$coinname]["blocks"]["timesincelast"];
-	$api["workers"] =  $data["pools"][$coinname]["workerCount"];
-	$api["fees"] =  $data["pools"][$coinname]["poolFees"][""];
+	$api["poolhashrate"] = $data["pools"]["$coinname"]["hashrate"]/500000;
+	$api["nethashrate"] = $data["pools"]["$coinname"]["poolStats"]["networkSols"];
+	$api["shares"] = $data["pools"]["$coinname"]["shareCount"];
+	$api["totalblocks"] = $data["pools"]["$coinname"]["blocks"]["confirmed"];
+	$api["lastblock"] = $data["pools"]["$coinname"]["blocks"]["lastblock"];
+	$api["timesincelast"] = $data["pools"]["$coinname"]["blocks"]["timesincelast"];
+	$api["workers"] =  $data["pools"]["$coinname"]["workerCount"];
+	$api["fees"] =  $data["pools"]["$coinname"]["poolFees"][""];
 	return $api;
 }
 
