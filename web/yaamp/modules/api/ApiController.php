@@ -122,6 +122,7 @@ class ApiController extends CommonController
 			foreach ($coins as $coin)
 			{
 				$symbol = $coin->symbol;
+				$coinname = strtolower($coin->name);
 				$algo = $coin->algo;
 				
 
@@ -137,7 +138,7 @@ class ApiController extends CommonController
 				
 				
 				if($algo == "equihash_144"){
-					$snomp = get_snomp_api_poolStatus();
+					$snomp = get_snomp_api_poolStatus($coinname);
 					$workers = $snomp["workers"];
 					$algo_hashrate = $snomp["poolhashrate"];
 					$fees = $snomp["fees"];
