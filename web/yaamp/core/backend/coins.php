@@ -184,7 +184,7 @@ function BackendCoinsUpdate()
             else if($coin->symbol == 'XSG') {
 					$blocksubsidy = $remote->getblocksubsidy('{}');
                     // coinbasevalue here is the amount available for miners, not the full block amount
-                    $coin->reward = arraySafeVal($blocksubsidy,'miner_reward')/100000000 * $coin->reward_mul;
+                    $coin->reward = arraySafeVal($blocksubsidy,'miner_reward') * $coin->reward_mul;
                     $coin->charity_amount = $coin->reward * $coin->charity_percent / 100;
             }
 
