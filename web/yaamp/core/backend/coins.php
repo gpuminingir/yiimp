@@ -183,14 +183,14 @@ function BackendCoinsUpdate()
 
             else if($coin->symbol == 'XSG') {
 					$blocksubsidy = $remote->getblocksubsidy('{}');
-					$coin->errors = $blocksubsidy;
-						if($template && isset($template['coinbasetxn']))
-						{
-							// no coinbasevalue in ZEC blocktemplate :/
-							$txn = $template['coinbasetxn'];
-							$coin->charity_amount = arraySafeVal($txn,'foundersreward',0)/100000000;
-							$coin->reward = 9.5;
-						}
+					$coin->errors = $blocksubsidy["miner_reward"];
+					if($template && isset($template['coinbasetxn']))
+					{
+						// no coinbasevalue in ZEC blocktemplate :/
+						$txn = $template['coinbasetxn'];
+						$coin->charity_amount = arraySafeVal($txn,'foundersreward',0)/100000000;
+						$coin->reward = 9.5;
+					}
                     // coinbasevalue here is the amount available for miners, not the full block amount
 //                    $coin->reward = arraySafeVal($blocksubsidy,'miner_reward') * $coin->reward_mul;
 //                    $coin->charity_amount = $coin->reward * $coin->charity_percent / 100;
