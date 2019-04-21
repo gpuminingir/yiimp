@@ -14,7 +14,7 @@ function get_snomp_api_poolStatus(){
 	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	$data = curl_exec($ch);
-	curl_close($ch);$coinname
+	curl_close($ch);
 	$data = json_decode($data,true);
 	$api["poolhashrate"] = $data["pools"]["zelcash"]["hashrate"]/500000;
 	$api["nethashrate"] = $data["pools"]["zelcash"]["poolStats"]["networkSols"];

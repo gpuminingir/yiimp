@@ -122,7 +122,6 @@ class ApiController extends CommonController
 			foreach ($coins as $coin)
 			{
 				$symbol = $coin->symbol;
-//				$coinname = strtolower($coin->name);
 				$algo = $coin->algo;
 				
 
@@ -136,8 +135,7 @@ class ApiController extends CommonController
 				$since = $timelast ? $timelast : time() - 60*60;
 				$t24 = time() - 24*60*60;
 				
-//				print $coinname;
-//				$coinname="zelcash";
+				
 				if($algo == "equihash_144"){
 					$snomp = get_snomp_api_poolStatus();
 					$workers = $snomp["workers"];
