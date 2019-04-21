@@ -122,7 +122,7 @@ class ApiController extends CommonController
 			foreach ($coins as $coin)
 			{
 				$symbol = $coin->symbol;
-				$coinname = strtolower($coin->name);
+//				$coinname = strtolower($coin->name);
 				$algo = $coin->algo;
 				
 
