@@ -184,7 +184,7 @@ function BackendCoinsUpdate()
             else if($coin->symbol == 'XSG') {
 					$blocksubsidy = $remote->getblocksubsidy('{}');
 //					$coin->errors = $blocksubsidy["miner_reward"];
-print_r($blocksubsidy);
+					print_r($blocksubsidy);
 					if($template && isset($template['coinbasetxn']))
 					{
 						// no coinbasevalue in ZEC blocktemplate :/
