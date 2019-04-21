@@ -4,10 +4,10 @@ if(isset($_REQUEST["action"])) $action=$_REQUEST["action"]; else $action=false;
 
 
 if($action=="dump"){
-	var_dump(get_snomp_api_poolStatus());
+	var_dump(get_snomp_api_poolStatus($coin));
 }
 	
-function get_snomp_api_poolStatus(){
+function get_snomp_api_poolStatus($coin){
 	$url = 'http://localhost:8800/api/stats';
 	$ch = curl_init($url);
 	curl_setopt($ch, CURLOPT_TIMEOUT, 5);
@@ -16,14 +16,14 @@ function get_snomp_api_poolStatus(){
 	$data = curl_exec($ch);
 	curl_close($ch);
 	$data = json_decode($data,true);
-	$api["poolhashrate"] = $data["pools"]["zelcash"]["hashrate"]/500000;
-	$api["nethashrate"] = $data["pools"]["zelcash"]["poolStats"]["networkSols"];
-	$api["shares"] = $data["pools"]["zelcash"]["shareCount"];
-	$api["totalblocks"] = $data["pools"]["zelcash"]["blocks"]["confirmed"];
-	$api["lastblock"] = $data["pools"]["zelcash"]["blocks"]["lastblock"];
-	$api["timesincelast"] = $data["pools"]["zelcash"]["blocks"]["timesincelast"];
-	$api["workers"] =  $data["pools"]["zelcash"]["workerCount"];
-	$api["fees"] =  $data["pools"]["zelcash"]["poolFees"][""];
+	$api["poolhashrate"] = $data["pools"][$coin]["hashrate"]/500000;
+	$api["nethashrate"] = $data["pools"][$coin]["poolStats"]["networkSols"];
+	$api["shares"] = $data["pools"][$coin]["shareCount"];
+	$api["totalblocks"] = $data["pools"][$coin]["blocks"]["confirmed"];
+	$api["lastblock"] = $data["pools"][$coin]["blocks"]["lastblock"];
+	$api["timesincelast"] = $data["pools"][$coin]["blocks"]["timesincelast"];
+	$api["workers"] =  $data["pools"][$coin]["workerCount"];
+	$api["fees"] =  $data["pools"][$coin]["poolFees"][""];
 	return $api;
 }
 
