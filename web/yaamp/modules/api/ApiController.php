@@ -136,7 +136,7 @@ class ApiController extends CommonController
 				$since = $timelast ? $timelast : time() - 60*60;
 				$t24 = time() - 24*60*60;
 				
-				
+				print $coinname;
 				if($algo == "equihash_144"){
 					$snomp = get_snomp_api_poolStatus($coinname);
 					$workers = $snomp["workers"];
