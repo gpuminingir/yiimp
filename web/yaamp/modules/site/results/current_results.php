@@ -87,11 +87,10 @@ foreach($algos as $item)
 
 	if($algo == "equihash_144"){
 		$snomp = get_snomp_api_poolStatus();
-		
 		$workers = $snomp["workers"];
 		$hashrate = $snomp["poolhashrate"];
 		$fees = $snomp["fees"];
-		$hashrate_sfx = $hashrate? Itoa2($hashrate).'': '-';
+		$hashrate_sfx = $hashrate ? Itoa2($hashrate).'': '-';
 		
 	}else{
 		$workers = getdbocount('db_workers', "algo=:algo", array(':algo'=>$algo));
@@ -177,8 +176,12 @@ foreach($algos as $item)
 	            echo "<td align='right' style='font-size: .8em;'>".$port_db->workers."</td>";
 	        else
 	            echo "<td align='right' style='font-size: .8em;'>$workers</td>";
+			if($algo == "equihash_144"){
+				$pool_hash = $snomp["poolhashrate"];		
+			}else{
+				$pool_hash = yaamp_coin_rate($coin->id);
+			}
 
-	        $pool_hash = yaamp_coin_rate($coin->id);
 	        $pool_hash_sfx = $pool_hash? Itoa2($pool_hash).'h/s': "-";
 			
 	        echo "<td align='right' style='font-size: .8em;'>$pool_hash_sfx</td>";
